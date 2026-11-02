@@ -3,16 +3,16 @@
 Additive only. The new post-filing statuses (examination, published, opposition_period, refused,
 withdrawn) need no schema change: ``trademark.status`` is a plain string.
 
-Revision ID: 0075_post_filing_tracking
-Revises: 0074_merge_clearance
+Revision ID: 0076_post_filing_tracking
+Revises: 0075_merge_agent_filing
 """
 
 import sqlalchemy as sa
 
 from alembic import op
 
-revision = "0075_post_filing_tracking"
-down_revision = "0074_merge_clearance"
+revision = "0076_post_filing_tracking"
+down_revision = "0075_merge_agent_filing"
 branch_labels = None
 depends_on = None
 
