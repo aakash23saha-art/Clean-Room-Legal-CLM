@@ -19,7 +19,7 @@ import { can } from "@/lib/intake";
 import type { IntakeDraft } from "@/lib/types";
 
 import { LegalIntakeBoard, MockupShell } from "./_legal-intake";
-import { RequestOverview } from "./_request-overview";
+import { OpenRequest } from "./_open-request";
 
 import { AGREEMENT_FORMS, AgreementWizard, type AgreementFormDef } from "./_agreement-forms";
 import { LegalQuestionForm } from "./_legal-question-form";
@@ -137,7 +137,7 @@ export default function IntakePage() {
       ) : null}
 
       {detailId ? (
-        <RequestOverview id={detailId} canManage={isStaff} onBack={() => setDetailId(null)} />
+        <OpenRequest id={detailId} canManage={isStaff} onBack={() => setDetailId(null)} />
       ) : (
         <>
           {section === "queue" && <LegalIntakeBoard onOpen={setDetailId} mode="pool" />}

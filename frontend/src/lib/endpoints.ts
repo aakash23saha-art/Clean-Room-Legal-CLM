@@ -109,6 +109,9 @@ import type {
   Trademark,
   SearchRunUpdatePayload,
   TrademarkActivityEntry,
+  TrademarkByRequest,
+  TrademarkPostFilingPayload,
+  TrademarkResponsePayload,
   TrademarkCreatePayload,
   TrademarkDecisionPayload,
   TrademarkFilingPayload,
@@ -1266,7 +1269,12 @@ export const trademarksApi = {
     apiFetch<Trademark>(`/trademarks/${id}/decision`, { method: "POST", body: payload }),
   recordFiling: (id: string, payload: TrademarkFilingPayload) =>
     apiFetch<Trademark>(`/trademarks/${id}/filing`, { method: "POST", body: payload }),
+  postFilingUpdate: (id: string, payload: TrademarkPostFilingPayload) =>
+    apiFetch<Trademark>(`/trademarks/${id}/post-filing-update`, { method: "POST", body: payload }),
+  openResponse: (id: string, payload: TrademarkResponsePayload) =>
+    apiFetch<Trademark>(`/trademarks/${id}/responses`, { method: "POST", body: payload }),
   activity: (id: string) => apiFetch<TrademarkActivityEntry[]>(`/trademarks/${id}/activity`),
+  byRequest: (requestId: string) => apiFetch<TrademarkByRequest>(`/trademarks/by-request/${requestId}`),
   integrationsStatus: () =>
     apiFetch<IntegrationStatusResponse>("/trademarks/integrations/status"),
   testIntegration: (service: string) =>
