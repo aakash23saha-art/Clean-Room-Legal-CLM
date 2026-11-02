@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 
 from fastapi import HTTPException
-from sqlalchemy import cast, func, select
+from sqlalchemy import and_, cast, func, select
 from sqlalchemy import text as sql_text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Session
@@ -366,6 +366,23 @@ def _decode_b64(content_b64: str, filename: str) -> bytes:
 
 
 _PARTY_ROLES = {"counterparty", "adverse", "related", "our_side"}
+
+
+# A trademark clearance case, and an examination / opposition response, are worked in the Trademarks
+# module, so the Legal Intake request tables do not list them. Each is marked by the answer its workflow is
+# chosen by; these must equal app.trademarks.clearance_service.CLEARANCE_MARKER_FIELD and
+# RESPONSE_MARKER_FIELD (a test holds them together).
+CLEARANCE_MARKER_FIELD = "tm_clearance"
+RESPONSE_MARKER_FIELD = "tm_response"
+TRADEMARK_MARKER_FIELDS = (CLEARANCE_MARKER_FIELD, RESPONSE_MARKER_FIELD)
+
+
+def _outside_clearance_cases():
+    """True for every request except one worked in Trademarks. IS DISTINCT FROM keeps requests with no
+    answers at all (NULL) in the list."""
+    return and_(
+        *(IntakeRequest.field_values[marker].as_string().is_distinct_from("true") for marker in TRADEMARK_MARKER_FIELDS)
+    )
 
 
 def _accessible(user: User):
@@ -1155,7 +1172,7 @@ class IntakeService:
     def list_requests(self, *, user: User, status_filter: str | None = None,
                       mine: bool = False) -> list[dict]:
         db = self.db
-        q = select(IntakeRequest).where(_accessible(user))
+        q = select(IntakeRequest).where(_accessible(user), _outside_clearance_cases())
         if mine:
             q = q.where(IntakeRequest.requester_user_id == user.id)
         if status_filter:
@@ -1557,6 +1574,7 @@ class IntakeService:
         db = self.db
         q = select(IntakeRequest).where(
             _accessible(user),
+            _outside_clearance_cases(),
             IntakeRequest.status.in_(OPEN_STATUSES),
         )
         rows = db.scalars(q.order_by(IntakeRequest.submitted_at.desc())).all()
