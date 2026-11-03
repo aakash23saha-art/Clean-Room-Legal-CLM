@@ -60,11 +60,10 @@ services:
       - ./backend:/app
 
   worker:
-    # watchfiles restarts the Celery worker whenever app/ changes.
+    # No watchfiles here: the watcher dies with "Cannot allocate memory" while the
+    # NeMo rails load (torch/spaCy). Restart the worker manually after code edits.
     command:
-      ["watchfiles",
-       "celery -A app.jobs.celery_app.celery_app worker --loglevel=info --concurrency=12",
-       "/app/app"]
+      ["celery", "-A", "app.jobs.celery_app.celery_app", "worker", "--loglevel=info", "--concurrency=2"]
     environment:
       <<: *dev_app_env
       WATCHFILES_FORCE_POLLING: "true"

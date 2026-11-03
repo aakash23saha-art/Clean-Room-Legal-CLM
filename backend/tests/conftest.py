@@ -25,7 +25,7 @@ import os
 from collections.abc import Generator
 
 os.environ.setdefault("ENVIRONMENT", "test")
-for _mock in ("MOCK_CLAUDE", "MOCK_DOCUSIGN", "MOCK_REDUCTO", "MOCK_RESEND", "MOCK_SENDGRID"):
+for _mock in ("MOCK_CLAUDE", "MOCK_GUARDRAILS", "MOCK_DOCUSIGN", "MOCK_REDUCTO", "MOCK_RESEND", "MOCK_SENDGRID"):
     os.environ[_mock] = "true"
 # Forced off for the same reason the mocks are forced on: the dev container
 # exports DISABLE_RBAC=true, and inheriting it would make every permission
