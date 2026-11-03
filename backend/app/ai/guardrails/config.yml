@@ -11,24 +11,24 @@
 # context message - see app/ai/guardrail_service.py. Without it the rail is a no-op.
 #
 # Every rail is a built-in NeMo Guardrails flow. The Claude Haiku "judge" models are
-# overridden at start-up from app settings (GUARDRAILS_MODEL) in app/ai/guardrail_service.py.
+# overridden at start-up with GUARDRAILS_MODEL from .env (app/ai/guardrail_service.py).
 # Jailbreak attempts are caught by the "self check input" prompt (policy rule 5).
 
 models:
   - type: main
     engine: anthropic
-    model: claude-haiku-4-5-20251001
+    model: GUARDRAILS_MODEL  # replaced at start-up from .env
   - type: content_safety
     engine: anthropic
-    model: claude-haiku-4-5-20251001
+    model: GUARDRAILS_MODEL  # replaced at start-up from .env
   - type: topic_control
     engine: anthropic
-    model: claude-haiku-4-5-20251001
+    model: GUARDRAILS_MODEL  # replaced at start-up from .env
 
 instructions:
   - type: general
     content: |
-      Below is a conversation between an enterprise Legal AI assistant and a user analyzing a Cloud Services Agreement.
+      Below is a conversation between an enterprise Legal AI assistant and a user working with legal contracts of any type.
       The assistant strictly adheres to legal privacy standards, confidentiality terms, and ethical walls.
 
 sample_conversation: |
@@ -48,7 +48,6 @@ rails:
     injection_detection:
       injections:
         - code
-        - sqli
         - template
         - xss
       action: reject
@@ -67,6 +66,8 @@ rails:
           - identity_hate
         parameters:
           top_k: null
+          truncation: true
+          max_length: 512
     sensitive_data_detection:
       input:
         entities:

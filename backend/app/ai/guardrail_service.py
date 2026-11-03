@@ -40,7 +40,7 @@ _REASONS = (
     ("detect sensitive data", "it contains sensitive personal or financial data"),
     ("topic safety", "it is outside the topics this assistant supports (contracts and legal operations)"),
     ("content safety", "it contains unsafe content"),
-    ("injection detection", "it contained code, SQL, template or script injection patterns"),
+    ("injection detection", "it contained code, template or script injection patterns"),
     ("self check facts", "its claims are not supported by the contract text it was based on"),
     ("hf classifier", "it was classified as toxic or abusive language"),
     (

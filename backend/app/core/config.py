@@ -136,7 +136,8 @@ class Settings(BaseSettings):
     # on (CI/dev without a key). fail_closed: a rail error BLOCKS the request.
     mock_guardrails: bool = False
     guardrails_fail_closed: bool = True
-    guardrails_model: str = "claude-haiku-4-5-20251001"
+    # Claude model the NeMo guardrails run on; no default: set GUARDRAILS_MODEL in .env.
+    guardrails_model: str
     ai_store_raw_outputs: bool = False
     ai_max_tool_iterations: int = 8
     ai_default_temperature: float = 0.0

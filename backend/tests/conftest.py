@@ -25,6 +25,7 @@ import os
 from collections.abc import Generator
 
 os.environ.setdefault("ENVIRONMENT", "test")
+os.environ.setdefault("GUARDRAILS_MODEL", "claude-haiku-4-5-20251001")
 for _mock in ("MOCK_CLAUDE", "MOCK_GUARDRAILS", "MOCK_DOCUSIGN", "MOCK_REDUCTO", "MOCK_RESEND", "MOCK_SENDGRID"):
     os.environ[_mock] = "true"
 # Forced off for the same reason the mocks are forced on: the dev container
