@@ -50,11 +50,9 @@ rails:
       action: reject
     hf_classifier:
       toxicity:
-        # Served by the guardrail-models program running on the host machine (its own RAM, no
-        # Docker); base_url is overridden from GUARDRAIL_MODELS_URL (.env) in app/ai/guardrail_service.py.
-        engine: vllm
-        base_url: http://127.0.0.1:8001
+        engine: local
         model: unitary/toxic-bert
+        task: text-classification
         threshold: 0.5
         blocked_labels:
           - toxic
@@ -63,6 +61,10 @@ rails:
           - threat
           - insult
           - identity_hate
+        parameters:
+          top_k: null
+          truncation: true
+          max_length: 512
     sensitive_data_detection:
       # Indian identifiers are custom patterns (Presidio's built-in ones are US/UK-only). Bare digit
       # patterns score low and only reach the threshold when a context word sits next to them.
